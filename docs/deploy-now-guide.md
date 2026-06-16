@@ -66,19 +66,25 @@ backend/Dockerfile.user-service
 backend/Dockerfile.api-gateway
 ```
 
-In Render, set root directory:
+In Render, leave root directory empty:
 
 ```text
-backend
+Root Directory: empty
 ```
 
-Then set Dockerfile path for each service:
+Set Docker build context directory:
 
 ```text
-Dockerfile.restaurant-service
-Dockerfile.order-service
-Dockerfile.user-service
-Dockerfile.api-gateway
+.
+```
+
+Then set Dockerfile path for each service from the repository root:
+
+```text
+backend/Dockerfile.restaurant-service
+backend/Dockerfile.order-service
+backend/Dockerfile.user-service
+backend/Dockerfile.api-gateway
 ```
 
 No Docker build arguments are required when using these service-specific Dockerfiles.
