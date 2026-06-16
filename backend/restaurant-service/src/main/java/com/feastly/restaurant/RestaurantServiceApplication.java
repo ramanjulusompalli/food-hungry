@@ -91,7 +91,7 @@ class RestaurantController {
   Restaurant one(@PathVariable long id) {
     log.info("Fetching restaurant by id={}", id);
     Restaurant restaurant = restaurants.stream()
-        .filter(restaurant -> restaurant.id() == id)
+        .filter(item -> item.id() == id)
         .findFirst()
         .orElseThrow();
     log.info("Restaurant found. id={} name={}", restaurant.id(), restaurant.name());
