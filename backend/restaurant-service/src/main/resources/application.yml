@@ -1,0 +1,17 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+  application:
+    name: restaurant-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: INFO
+    com.feastly.restaurant: DEBUG

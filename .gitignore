@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.expo/
+.expo-shared/
+target/
+.idea/
+*.log
+.env

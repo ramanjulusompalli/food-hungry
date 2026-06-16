@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Food Hungry",
+    "slug": "food-hungry",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#fff8ef"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.foodhungry.app"
+    },
+    "android": {
+      "package": "com.foodhungry.app"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiUrl": "http://localhost:8080"
+    }
+  }
+}
