@@ -57,20 +57,31 @@ user-service
 api-gateway
 ```
 
-Use the backend Dockerfile:
+Use the backend Dockerfile for each service:
 
 ```text
-backend/Dockerfile
+backend/Dockerfile.restaurant-service
+backend/Dockerfile.order-service
+backend/Dockerfile.user-service
+backend/Dockerfile.api-gateway
 ```
 
-Set build argument per service:
+In Render, set root directory:
 
 ```text
-SERVICE_NAME=restaurant-service
-SERVICE_NAME=order-service
-SERVICE_NAME=user-service
-SERVICE_NAME=api-gateway
+backend
 ```
+
+Then set Dockerfile path for each service:
+
+```text
+Dockerfile.restaurant-service
+Dockerfile.order-service
+Dockerfile.user-service
+Dockerfile.api-gateway
+```
+
+No Docker build arguments are required when using these service-specific Dockerfiles.
 
 For `user-service`, also configure the datasource environment variables from Step 2.
 
