@@ -1,6 +1,7 @@
 package com.feastly.user;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,31 +46,26 @@ record UserResponse(String id, String name, String email, String mobile) {
 class UserController {
   private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-  private final JdbcTemplate jdbcTemplate;
+  private final List<AppUser> users = new ArrayList<>();
 
-  private final RowMapper<AppUser> userMapper = (rs, rowNum) -> new AppUser(
-      rs.getString("id"),
-      rs.getString("name"),
-      rs.getString("email"),
-      rs.getString("mobile"),
-      rs.getString("password"),
-      rs.getTimestamp("created_at").toInstant());
-
-  UserController(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
+  UserController() {
+    users.add(new AppUser(
+        "demo-user-001",
+        "Food Hungry Customer",
+        "customer@foodhungry.com",
+        "9876543210",
+        "password123",
+        Instant.now()));
   }
 
   @GetMapping
   List<UserResponse> all() {
     log.info("Fetching all users");
-    List<UserResponse> users = jdbcTemplate.query(
-            "SELECT id, name, email, mobile, password, created_at FROM app_users ORDER BY created_at DESC",
-            userMapper)
-        .stream()
+    List<UserResponse> responses = users.stream()
         .map(UserResponse::from)
         .toList();
-    log.info("Fetched users. count={}", users.size());
-    return users;
+    log.info("Fetched users. count={}", responses.size());
+    return responses;
   }
 
   @PostMapping("/register")
@@ -92,14 +86,7 @@ class UserController {
         request.mobile().trim(),
         request.password(),
         Instant.now());
-    jdbcTemplate.update(
-        "INSERT INTO app_users (id, name, email, mobile, password, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-        user.id(),
-        user.name(),
-        user.email(),
-        user.mobile(),
-        user.password(),
-        java.sql.Timestamp.from(user.createdAt()));
+    users.add(user);
     log.info("User registered. id={} email={}", user.id(), user.email());
     return UserResponse.from(user);
   }
@@ -124,10 +111,9 @@ class UserController {
       return Optional.empty();
     }
 
-    List<AppUser> matches = jdbcTemplate.query(
-        "SELECT id, name, email, mobile, password, created_at FROM app_users WHERE LOWER(email) = LOWER(?)",
-        userMapper,
-        email.trim());
+    List<AppUser> matches = users.stream()
+        .filter(user -> user.email().equalsIgnoreCase(email.trim()))
+        .toList();
     log.debug("findByEmail completed. email={} matches={}", email, matches.size());
     return matches.stream().findFirst();
   }

@@ -50,26 +50,7 @@ Check users:
 http://localhost:8084/users
 ```
 
-## Local Database For User Service
-
-`user-service` now uses PostgreSQL.
-
-For local testing, either run PostgreSQL locally with:
-
-```text
-Database: food_hungry
-Username: postgres
-Password: postgres
-```
-
-Or start `user-service` with Supabase values:
-
-```powershell
-set SPRING_DATASOURCE_URL=jdbc:postgresql://YOUR_SUPABASE_HOST:5432/postgres?sslmode=require
-set SPRING_DATASOURCE_USERNAME=postgres
-set SPRING_DATASOURCE_PASSWORD=YOUR_SUPABASE_DATABASE_PASSWORD
-mvn spring-boot:run -pl user-service
-```
+`user-service` currently uses in-memory `ArrayList`, so it does not need a database for local demo testing.
 
 ## Step 2: Frontend
 

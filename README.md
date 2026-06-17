@@ -71,17 +71,11 @@ Then install the Expo Go app on your Android phone and scan the QR code.
 - Login API through gateway: `http://localhost:8080/api/users/login`
 - Register API through gateway: `http://localhost:8080/api/users/register`
 
-## User Service Database
+## User Service Storage
 
-`user-service` uses PostgreSQL.
+`user-service` currently uses in-memory `ArrayList` for demo deployment.
 
-Set these environment variables for Supabase or cloud deployment:
-
-```text
-SPRING_DATASOURCE_URL=jdbc:postgresql://YOUR_SUPABASE_HOST:5432/postgres?sslmode=require
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=YOUR_SUPABASE_DATABASE_PASSWORD
-```
+Registered users reset when the service restarts. Later, replace this with PostgreSQL for production.
 
 ## First Version Scope
 

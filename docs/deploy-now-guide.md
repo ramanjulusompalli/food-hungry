@@ -20,33 +20,7 @@ C:\Users\raman\Documents\Codex\2026-06-15\hi-i-want-to-create-one\work\food-hung
 
 Do not upload `node_modules`, `target`, `.expo`, or `.idea`.
 
-## Step 2: Create Supabase Database
-
-Create a Supabase project, then copy the PostgreSQL connection details.
-
-For `user-service`, set these environment variables in your backend host:
-
-```text
-SPRING_DATASOURCE_URL=jdbc:postgresql://YOUR_SUPABASE_HOST:5432/postgres?sslmode=require
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=YOUR_SUPABASE_DATABASE_PASSWORD
-```
-
-Supabase may also show a connection pooler URL. Use the direct/session connection for Spring Boot first.
-
-The `user-service` will automatically create this table on startup:
-
-```text
-app_users
-```
-
-It also inserts this demo user if it does not exist:
-
-```text
-customer@foodhungry.com / password123
-```
-
-## Step 3: Deploy Backend Services
+## Step 2: Deploy Backend Services
 
 Deploy these four services separately:
 
@@ -89,7 +63,7 @@ backend/Dockerfile.api-gateway
 
 No Docker build arguments are required when using these service-specific Dockerfiles.
 
-For `user-service`, also configure the datasource environment variables from Step 2.
+For this demo version, `user-service` uses in-memory `ArrayList`, so no database environment variables are required.
 
 After deploying the first three services, configure API Gateway environment variables:
 
@@ -101,7 +75,7 @@ SERVICES_USER_URL=https://your-user-service-url
 
 The cloud provider will usually set `PORT` automatically. The app already supports that.
 
-## Step 4: Deploy Frontend To Cloudflare Pages
+## Step 3: Deploy Frontend To Cloudflare Pages
 
 In Cloudflare dashboard:
 
@@ -136,7 +110,7 @@ EXPO_PUBLIC_API_URL=https://your-api-gateway-url
 
 10. Deploy.
 
-## Step 5: Test Production
+## Step 4: Test Production
 
 Open your Cloudflare Pages URL and check:
 
@@ -147,10 +121,10 @@ Open your Cloudflare Pages URL and check:
 
 ## Important Current Limitation
 
-Right now `order-service` uses in-memory `ArrayList`.
+Right now `user-service` and `order-service` use in-memory `ArrayList`.
 
 That means:
 
-- Orders reset whenever the order service restarts.
-- User registration/login is now ready for PostgreSQL.
-- Later we should add PostgreSQL persistence for orders and restaurants too.
+- Registered users and orders reset whenever services restart.
+- This is okay for demo deployment.
+- Later we should add PostgreSQL persistence for users, orders, and restaurants.
