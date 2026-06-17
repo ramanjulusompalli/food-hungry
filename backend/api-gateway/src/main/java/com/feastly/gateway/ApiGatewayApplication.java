@@ -34,8 +34,8 @@ public class ApiGatewayApplication {
   @Bean
   RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder
-        .connectTimeout(Duration.ofSeconds(8))
-        .readTimeout(Duration.ofSeconds(20))
+        .setConnectTimeout(Duration.ofSeconds(8))
+        .setReadTimeout(Duration.ofSeconds(20))
         .build();
   }
 }
