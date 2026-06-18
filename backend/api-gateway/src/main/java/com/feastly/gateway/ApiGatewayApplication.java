@@ -105,7 +105,7 @@ class GatewayController {
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<String> request = new HttpEntity<>(payload, headers);
     try {
-      return restTemplate.postForEntity(url, request, String.class);
+      return sanitizeResponse(restTemplate.postForEntity(url, request, String.class));
     } catch (RestClientException error) {
       log.error("Gateway POST failed. target={} message={}", url, error.getMessage(), error);
       return gatewayError("Downstream POST failed", url, error);
@@ -114,7 +114,7 @@ class GatewayController {
 
   private ResponseEntity<String> getJson(String url, String serviceName) {
     try {
-      return restTemplate.getForEntity(url, String.class);
+      return sanitizeResponse(restTemplate.getForEntity(url, String.class));
     } catch (RestClientException error) {
       log.error("Gateway GET failed. service={} target={} message={}", serviceName, url, error.getMessage(), error);
       return gatewayError(serviceName + " is not reachable", url, error);
@@ -131,6 +131,15 @@ class GatewayController {
     return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
         .contentType(MediaType.APPLICATION_JSON)
         .body(body);
+  }
+
+  private ResponseEntity<String> sanitizeResponse(ResponseEntity<String> response) {
+    ResponseEntity.BodyBuilder builder = ResponseEntity.status(response.getStatusCode());
+    MediaType contentType = response.getHeaders().getContentType();
+    if (contentType != null) {
+      builder.contentType(contentType);
+    }
+    return builder.body(response.getBody());
   }
 
   private String escape(String value) {
