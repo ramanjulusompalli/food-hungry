@@ -1,0 +1,45 @@
+services:
+  restaurant-service:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.restaurant-service
+    environment:
+      PORT: 8080
+      JAVA_TOOL_OPTIONS: -Xms32m -Xmx160m -XX:MaxMetaspaceSize=96m
+    restart: unless-stopped
+
+  order-service:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.order-service
+    environment:
+      PORT: 8080
+      JAVA_TOOL_OPTIONS: -Xms32m -Xmx160m -XX:MaxMetaspaceSize=96m
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.user-service
+    environment:
+      PORT: 8080
+      JAVA_TOOL_OPTIONS: -Xms32m -Xmx160m -XX:MaxMetaspaceSize=96m
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.api-gateway
+    depends_on:
+      - restaurant-service
+      - order-service
+      - user-service
+    environment:
+      PORT: 8080
+      JAVA_TOOL_OPTIONS: -Xms32m -Xmx160m -XX:MaxMetaspaceSize=96m
+      SERVICES_RESTAURANT_URL: http://restaurant-service:8080
+      SERVICES_ORDER_URL: http://order-service:8080
+      SERVICES_USER_URL: http://user-service:8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

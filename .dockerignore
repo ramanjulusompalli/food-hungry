@@ -1,0 +1,9 @@
+.git
+.idea
+.expo
+app
+outputs
+**/node_modules
+**/target
+**/.idea
+*.log
